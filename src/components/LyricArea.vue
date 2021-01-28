@@ -1,3 +1,6 @@
+/**
+ * 歌词显示区域
+ */
 <template>
   <div class="lyric_area">
     <div class="lyric_scroll_area"
@@ -14,27 +17,27 @@
 export default {
   data () {
     return {
-      lyricList: [],
-      time: this.current,
-      currentIndex: 0
+      lyricList: [], // 歌词列表
+      time: this.current, // 当前已播放时间
+      currentIndex: 0 // 当前播放的歌词
     }
   },
   props: {
-    songList: {
+    songList: { // 歌曲列表
       type: Array,
       default: () => {
         return []
       }
     },
-    fileUrl: {
+    fileUrl: { // 歌曲所在文件夹位置
       type: String,
       default: ''
     },
-    musicIndex: {
+    musicIndex: { // 当前播放歌曲下标
       type: Number,
       default: 0
     },
-    current: {
+    current: { // 当前已播放的时间
       type: Number,
       default: 0
     }
@@ -55,7 +58,7 @@ export default {
     }
   },
   methods: {
-    getLyric () {
+    getLyric () { // 获取歌词
       const param = {
         file: this.fileUrl + '/' + this.songList[this.musicIndex].split('.')[0] + '.lrc'
       }
@@ -98,7 +101,7 @@ export default {
         console.log(res)
       })
     },
-    currentLyric (index) {
+    currentLyric (index) { // 判断当前播放的歌词并将已播放的部分歌词隐藏
       if (index < this.lyricList.length - 1) {
         const current = this.time >= this.lyricList[index].t && this.time <= this.lyricList[index + 1].t
         this.currentIndex = current ? index : this.currentIndex

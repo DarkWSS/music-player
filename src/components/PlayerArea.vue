@@ -1,8 +1,13 @@
+/**
+ * 歌曲播放与播放控制
+ */
 <template>
   <div>
+    <!-- 播放歌曲 -->
     <audio :src="songUrl"
            ref="audio"></audio>
     <div class="play_area">
+      <!-- 歌曲信息 -->
       <div class="music_info">
         <div class="name">{{song.singer + ' - ' + song.name}}</div>
         <div class="time">{{progress}}</div>
@@ -25,6 +30,7 @@
            title="下一首"
            @click="handoverSong('next')"></i>
       </div>
+      <!-- 歌曲进度 -->
       <div class="progress">
         <div class="progress_bar"
              :style="{width: progressValue}"></div>
@@ -33,8 +39,10 @@
              :style="{left: progressValue}"></div>
       </div>
       <div class="right_area">
+        <!-- 播放顺序控制，功能未实现 -->
         <i class="iconfont music-sequence"
            title="顺序播放"></i>
+        <!-- 音量控制 -->
         <div class="volume_ctrl"
              :class="[showVolume ? '' : 'hide_volume']"
              @mouseleave="showVolume = false">
@@ -47,6 +55,7 @@
                :style="{top: (10.5 - volume) + 'rem'}"></div>
           <p>{{volume}}</p>
         </div>
+        <!-- 音量图标 -->
         <div class="volume"
              @click="showVolume = true">
           <i v-show="volume > 0"
@@ -67,28 +76,28 @@ export default {
       audio: null, // 播放器
       currentTime: 0, // 当前播放时间
       duration: '', // 音频时长
-      songIndex: 0,
-      songUrl: '',
-      volume: 10,
-      showVolume: false
+      songIndex: 0, // 歌曲下标
+      songUrl: '', // 歌曲路径
+      volume: 10, // 音量大小
+      showVolume: false // 是否显示音量控制区域
     }
   },
   props: {
-    songList: {
+    songList: { // 歌曲列表
       type: Array,
       default: () => {
         return []
       }
     },
-    fileUrl: {
+    fileUrl: { // 歌曲文件路径
       type: String,
       default: ''
     },
-    musicIndex: {
+    musicIndex: { // 播放音乐下标
       type: Number,
       default: 0
     },
-    current: {
+    current: { // 当前播放的时间
       type: Number,
       default: 0
     }
@@ -100,7 +109,7 @@ export default {
     progressValue () { // 当前歌曲播放进度
       return this.currentTime / this.duration * 100 + '%'
     },
-    song () {
+    song () { // 歌曲信息
       if (this.songList.length > 0) {
         const src = this.songList[this.songIndex]
         const songInfo = src.split('.')[0].replace(/%20/g, ' ').split('-')
@@ -138,9 +147,11 @@ export default {
         this.handoverSong('next')
       }
     })
+    // 获取歌曲时长
     this.audio.addEventListener('canplay', () => {
       this.duration = this.audio.duration
     })
+    // 歌曲可以播放时才允许播放
     this.audio.addEventListener('loadeddata', () => {
       if (this.audio.readyState >= 2 && this.playStatus) {
         this.playMusic()
@@ -193,7 +204,7 @@ export default {
       this.$emit('update:musicIndex', this.songIndex)
       this.playThisMusic(this.songIndex)
     },
-    playThisMusic (index) {
+    playThisMusic (index) { // 播放当前下标歌曲
       this.playStatus = true
       this.songIndex = index
       this.getMusic()
@@ -217,24 +228,24 @@ export default {
         console.log(res)
       })
     },
-    ctrlVolume (e) {
+    ctrlVolume (e) { // 控制音量
       console.log(e.layerY)
       this.volume = parseInt(11 - e.layerY / 16)
       this.audio.volume = this.volume / 10
     },
-    dragElem (e, direction) { // 移动拼图
+    dragElem (e, direction) { // 拖动音量或者进度的圆点
       const el = e.target
       const sX = e.clientX - el.offsetLeft
       const sY = e.clientY - el.offsetTop
       el.style.transition = 'none'
 
-      document.onmousemove = (e) => { // 拼图随鼠标移动
+      document.onmousemove = (e) => { // 圆点鼠标移动
         const eX = e.clientX - sX
         const eY = e.clientY - sY
-        if (direction.indexOf('horizontal') > -1) {
+        if (direction.indexOf('horizontal') > -1) { // 只能横向移动即歌曲进度调整
           el.style.left = eX + 'px'
           this.audio.currentTime = parseInt(el.style.left) / window.innerWidth * this.audio.duration
-        } else {
+        } else { // 只能纵向移动，歌曲音量控制
           if (eY >= 0 && eY <= 160) {
             el.style.top = eY + 8 + 'px'
             this.volume = parseInt(10 - eY / 16)
@@ -313,8 +324,10 @@ export default {
   .right_area {
     display: flex;
     i {
-      padding-left: 20px;
       cursor: pointer;
+    }
+    .volume {
+      padding-left: 20px;
     }
     .volume_ctrl {
       width: 40px;

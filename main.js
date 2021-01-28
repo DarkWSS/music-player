@@ -1,21 +1,23 @@
-
+/**
+ * electron功能的主要实现文件
+ */
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 1000,
-    height: 600,
+    width: 1000, // 宽度
+    height: 600, // 高度
     frame: false, // 边框
     center: true, // 居中
-    resizable: false, // 变更宽高
+    resizable: false, // 允许变更宽高
     webPreferences: {
       nodeIntegration: true,
-      // devTools: true,
-      preload: __dirname + '/preload.js'
+      // devTools: true, // 允许控制台
+      preload: __dirname + '/preload.js' // 加载额外文件，引入在vue里使用的electron属性
     }
   })
 
-  win.loadURL('http://127.0.0.1:5000/#/')
+  win.loadURL('http://127.0.0.1:5000/#/') // 加载Url，该url时python服务启动的的url
 
   //接收最小化命令
   ipcMain.on('window-min', function () {
@@ -33,7 +35,7 @@ function createWindow () {
   ipcMain.on('window-close', function () {
     win.close();
   })
-
+  // 打开弹窗
   ipcMain.on('open-directory-dialog', function (event, p) {
     dialog.showOpenDialog({
       properties: [p]

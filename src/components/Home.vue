@@ -1,5 +1,9 @@
+/**
+ * 音乐播放器结构页面
+ */
 <template>
   <div>
+    <!-- 播放器logo与窗口控制 -->
     <div class="page_head">
       <h5>
         <i class="iconfont music-logo"></i>
@@ -14,8 +18,10 @@
            class="iconfont music-close"></i>
       </div>
     </div>
+    <!-- 页面主体，左侧歌曲列表右侧歌词区域 -->
     <div class="page_main">
       <ol>
+        <!-- 歌曲列表 -->
         <div class="ol_head">
           <h4>播放列表
             <i class="iconfont music-list"></i>
@@ -29,16 +35,17 @@
                     :name="music"
                     :music-index.sync="musicIndex"
                     @play-music="playThisOne()"
-                    :index="index + 1"></music-item>
+                    :index="index"></music-item>
 
         <p v-show="musicList.length < 1">当前文件夹下没有歌曲</p>
       </ol>
+      <!-- 歌词区域 -->
       <lyric-area :song-list="musicList"
                   :music-index="musicIndex"
                   :current="current"
                   :file-url="fileUrl"></lyric-area>
     </div>
-
+    <!-- 音乐播放控制 -->
     <player-area ref="player"
                  :song-list="musicList"
                  :music-index.sync="musicIndex"
@@ -54,10 +61,10 @@ import LyricArea from './LyricArea'
 export default {
   data () {
     return {
-      musicList: [],
-      fileUrl: 'E:/music',
-      musicIndex: 0,
-      current: 0
+      musicList: [], // 歌曲列表
+      fileUrl: 'E:/music', // 歌曲所在文件夹位置
+      musicIndex: 0, // 当前播放歌曲下标
+      current: 0 // 当前已播放时间
     }
   },
   created () {
@@ -87,10 +94,10 @@ export default {
     LyricArea
   },
   methods: {
-    playThisOne () {
+    playThisOne () { // 调用音乐播放控制组件播放指定下标歌曲
       this.$refs.player.playThisMusic(this.musicIndex)
     },
-    openDialog () {
+    openDialog () { // 打开文件夹选择弹窗1，此为electron提供的功能
       let ipcRenderer = window.ipcRenderer
       ipcRenderer.send('open-directory-dialog', 'openDirectory')
       ipcRenderer.on('selectedItem', (e, path) => {
@@ -98,7 +105,7 @@ export default {
         this.getMusicList()
       })
     },
-    getMusicList () {
+    getMusicList () { // 获取歌曲列表
       const param = {
         fileUrl: this.fileUrl
       }
