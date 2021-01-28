@@ -1,21 +1,13 @@
 # musicplayer
 
-> A Vue.js project
+> 使用Python + Vue + electron实现的本地音乐播放器，代码加了些适当的注释方便理解
 
 ## Build Setup
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
+# 运行electron
+npm run start-ele
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# 运行打包程序，将项目打包为一个可直接运行的软件
+npm run electron-builder
+```
