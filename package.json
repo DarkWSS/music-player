@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "electron": "^11.2.1",
     "electron-packager": "^15.2.0",
+    "electron-squirrel-startup": "^1.0.0",
     "python-shell": "^2.0.3",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
@@ -35,6 +36,7 @@
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
+    "electron-winstaller": "^4.0.1",
     "eslint": "^4.15.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
